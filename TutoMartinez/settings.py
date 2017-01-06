@@ -79,13 +79,21 @@ WSGI_APPLICATION = 'TutoMartinez.wsgi.application'
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.oracle',
+    #     'NAME': 'XE',
+    #     'USER': 'USUARIOS',
+    #     'PASSWORD': '123456',
+    #     'HOST':'localhost',
+    #     'PORT':'1521'
+    # }
     'default': {
-        'ENGINE': 'django.db.backends.oracle',
-        'NAME': 'XE',
-	'USER': 'USUARIOS',
-	'PASSWORD': '123456',
-	'HOST':'localhost',
-	'PORT':'1521'
+        'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': 'XE',
+        # 'USER': 'USUARIOS',
+        # 'PASSWORD': '123456',
+        # 'HOST':'localhost',
+        # 'PORT':'1521'
     }
 }
 # Internationalization
