@@ -12,8 +12,8 @@ from django.db import models
 class Admin(models.Model):
     nombre = models.CharField(max_length=200, blank=True, null=True)
     eslogan = models.CharField(max_length=600, blank=True, null=True)
-    imagen_logo = models.TextField(blank=True, null=True)  # This field type is a guess.
-    video = models.TextField(blank=True, null=True)  # This field type is a guess.
+    imagen_logo = models.CharField(max_length=3600, blank=True, null=True)
+    video = models.CharField(max_length=3600, blank=True, null=True)
     mision = models.CharField(max_length=2000, blank=True, null=True)
     vision = models.CharField(max_length=2000, blank=True, null=True)
     acerca = models.CharField(max_length=2000, blank=True, null=True)
@@ -22,22 +22,22 @@ class Admin(models.Model):
         managed = False
         db_table = 'admin'
 
-
 class Bitacora(models.Model):
     id_bit = models.BigIntegerField(primary_key=True)
-    fecha = models.DateField()
-    usuario_id_usuario = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='usuario_id_usuario')
-    elemento_id_elemento = models.ForeignKey('Elemento', models.DO_NOTHING, db_column='elemento_id_elemento')
+    fecha = models.DateField(blank=True, null=True)
+    usuario_id_usuario = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='usuario_id_usuario', blank=True, null=True)
+    elemento_id_elemento = models.ForeignKey('Elemento', models.DO_NOTHING, db_column='elemento_id_elemento', blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'bitacora'
 
+
 class Chat(models.Model):
     id_chat = models.BigIntegerField(primary_key=True)
     status = models.CharField(max_length=1, blank=True, null=True)
-    usuario_admin = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='usuario_admin',related_name='%(class)s_usuario_admin')
-    usuario = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='usuario')
+    usuario_id_admin = models.BigIntegerField(blank=True, null=True)
+    usuario_id_user = models.BigIntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -45,13 +45,13 @@ class Chat(models.Model):
 
 class Elemento(models.Model):
     id_elemento = models.BigIntegerField(primary_key=True)
-    nombre = models.CharField(max_length=100)
-    tipo = models.CharField(max_length=1)
-    data = models.BinaryField(blank=True, null=True)
+    nombre = models.CharField(max_length=100, blank=True, null=True)
+    tipo = models.CharField(max_length=1, blank=True, null=True)
+    data = models.CharField(max_length=3600, blank=True, null=True)
     elementop = models.ForeignKey('self', models.DO_NOTHING, db_column='elementop', blank=True, null=True)
     permisos = models.BigIntegerField(blank=True, null=True)
-    grupo_id_grupo = models.ForeignKey('Grupo', models.DO_NOTHING, db_column='grupo_id_grupo')
-    usuario_id_usuario = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='usuario_id_usuario')
+    grupo_id_grupo = models.ForeignKey('Grupo', models.DO_NOTHING, db_column='grupo_id_grupo', blank=True, null=True)
+    usuario_id_usuario = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='usuario_id_usuario', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -59,45 +59,48 @@ class Elemento(models.Model):
 
 class Grupo(models.Model):
     id_grupo = models.BigIntegerField(primary_key=True)
-    nombre = models.CharField(max_length=80)
+    nombre = models.CharField(max_length=80, blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'grupo'
 
+
 class Mensaje(models.Model):
     id_mensaje = models.BigIntegerField(primary_key=True)
-    emisor = models.CharField(max_length=200)
+    emisor = models.CharField(max_length=200, blank=True, null=True)
     fecha = models.DateField(blank=True, null=True)
     mensaje = models.CharField(max_length=2000, blank=True, null=True)
-    chat_id_chat = models.ForeignKey(Chat, models.DO_NOTHING, db_column='chat_id_chat')
+    chat_id_chat = models.ForeignKey(Chat, models.DO_NOTHING, db_column='chat_id_chat', blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'mensaje'
 
+
 class Usuario(models.Model):
     id_usuario = models.BigIntegerField(primary_key=True)
-    nombre = models.CharField(max_length=200)
-    apellido = models.CharField(max_length=200)
-    telefono = models.BigIntegerField()
-    direccion = models.CharField(max_length=600)
-    clave = models.CharField(max_length=32)
-    correo = models.CharField(max_length=100)
-    foto = models.TextField()  # This field type is a guess.
-    genero = models.CharField(max_length=40)
-    fecha_nacimiento = models.DateField()
-    fecha_registro = models.DateField()
-    estatus = models.CharField(max_length=1)
-    estatus_cuenta = models.CharField(max_length=40)
+    nombre = models.CharField(max_length=200, blank=True, null=True)
+    apellido = models.CharField(max_length=200, blank=True, null=True)
+    telefono = models.BigIntegerField(blank=True, null=True)
+    direccion = models.CharField(max_length=600, blank=True, null=True)
+    clave = models.CharField(max_length=32, blank=True, null=True)
+    correo = models.CharField(max_length=100, blank=True, null=True)
+    foto = models.CharField(max_length=3600, blank=True, null=True)
+    genero = models.CharField(max_length=40, blank=True, null=True)
+    fecha_nacimiento = models.DateField(blank=True, null=True)
+    fecha_registro = models.DateField(blank=True, null=True)
+    status = models.CharField(max_length=1, blank=True, null=True)
+    status_cuenta = models.CharField(max_length=40, blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'usuario'
 
+
 class UsuarioGrupo(models.Model):
-    usuario_id_usuario = models.ForeignKey(Usuario, models.DO_NOTHING, db_column='usuario_id_usuario')
-    grupo_id_grupo = models.ForeignKey(Grupo, models.DO_NOTHING, db_column='grupo_id_grupo')
+    usuario_id_usuario = models.ForeignKey(Usuario, models.DO_NOTHING, db_column='usuario_id_usuario', blank=True, null=True)
+    grupo_id_grupo = models.ForeignKey(Grupo, models.DO_NOTHING, db_column='grupo_id_grupo', blank=True, null=True)
 
     class Meta:
         managed = False
